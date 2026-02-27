@@ -1,9 +1,9 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-import generation
 
 load_dotenv()
+import generation
 
 def init_session_state() -> None:
     if "qa_history" not in st.session_state:
@@ -67,12 +67,25 @@ def main() -> None:
         question = st.text_input("Your question", placeholder="e.g. How old is Oxford University?")
 
         if st.button("Get Answer", type="primary") and question.strip():
-            with st.spinner("Retrieving context and generating answer..."):
-                answer, context_chunks = generation.run_rag_query(
-                    user_query=question.strip(),
-                    n_results=n_results,
+            user_query = question.strip()
+
+            # First, compute confidence score to decide whether to run RAG
+            with st.spinner("Evaluating question relevance to Oxford..."):
+                score = generation.confidence_score(
+                    user_query=user_query,
                     model_name=model_name,
                 )
+
+            if score < 0.8:
+                answer = "The question is irrelevant to Oxford."
+                context_chunks = []
+            else:
+                with st.spinner("Retrieving context and generating answer..."):
+                    answer, context_chunks = generation.run_rag_query(
+                        user_query=user_query,
+                        n_results=n_results,
+                        model_name=model_name,
+                    )
 
             st.markdown("#### Answer")
             st.write(answer)
@@ -80,17 +93,18 @@ def main() -> None:
             st.session_state.qa_history.insert(
                 0,
                 {
-                    "question": question.strip(),
+                    "question": user_query,
                     "answer": answer,
                     "collection": "Oxford-Guide-2022",
                 },
             )
 
-            with st.expander("Show retrieved context chunks"):
-                for i, chunk in enumerate(context_chunks, start=1):
-                    st.markdown(f"**Chunk {i}:**")
-                    st.write(chunk)
-                    st.markdown("---")
+            if context_chunks:
+                with st.expander("Show retrieved context chunks"):
+                    for i, chunk in enumerate(context_chunks, start=1):
+                        st.markdown(f"**Chunk {i}:**")
+                        st.write(chunk)
+                        st.markdown("---")
 
         if st.session_state.qa_history:
             st.markdown("#### Recent questions")
