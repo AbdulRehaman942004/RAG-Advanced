@@ -77,7 +77,7 @@ def main() -> None:
                 )
 
             if score < 0.8:
-                answer = "The question is irrelevant to Oxford."
+                answer = "The question is irrelevant to Oxford Please come back with a relevant question."
                 context_chunks = []
             else:
                 with st.spinner("Retrieving context and generating answer..."):
