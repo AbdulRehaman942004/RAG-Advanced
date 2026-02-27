@@ -12,14 +12,14 @@ def init_session_state() -> None:
 
 def main() -> None:
     st.set_page_config(
-        page_title="RAG Naive – PDF Q&A",
+        page_title="Advanced RAG – PDF Q&A",
         page_icon="📘",
         layout="wide",
     )
 
     init_session_state()
 
-    st.title("RAG Naive – PDF Question Answering")
+    st.title("Advanced RAG – PDF Question Answering")
     st.caption(
         "Ask questions answered from a pre-indexed PDF collection in ChromaDB using the Groq LLM."
     )
