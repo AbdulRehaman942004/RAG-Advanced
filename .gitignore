@@ -1,3 +1,2 @@
 venv/
-chromadb_data/
 *.env
