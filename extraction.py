@@ -5,23 +5,6 @@ pdf_path = "Oxford-Guide-2022.pdf"
 chunk_size = 500
 
 
-def extract_bytes_to_chunks(
-    file_bytes: bytes,
-    size: int | None = None,
-) -> List[str]:
-    """Extract text from PDF bytes (e.g. uploaded file) and split into chunks."""
-    import io
-
-    target_chunk = size or chunk_size
-    reader = PyPDF2.PdfReader(io.BytesIO(file_bytes))
-    full_text = ""
-    for page in reader.pages:
-        text = page.extract_text()
-        if text:
-            full_text += text + "\n"
-    return [full_text[i : i + target_chunk] for i in range(0, len(full_text), target_chunk)]
-
-
 def extract_pdf_to_chunks(
     path: str | None = None,
     size: int | None = None,
@@ -47,11 +30,11 @@ def extract_pdf_to_chunks(
 
 # Preserve original behaviour for scripts that import text_list
 try:
-    text_list = extract_pdf_to_chunks(pdf_path,chunk_size)
+    text_list = extract_pdf_to_chunks(pdf_path, chunk_size)
 except Exception:
     text_list = []
 
 if __name__ == "__main__":
     # print a slice of chunks
-   for i in range(0, min(3, len(text_list))):
+    for i in range(0, min(3, len(text_list))):
         print(f"{text_list[i]} \n")
