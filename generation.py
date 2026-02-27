@@ -46,7 +46,7 @@ USER QUERY:
 Instructions:
 - Answer the query using ONLY the information in the CONTEXT.
 - If the CONTEXT does not contain enough information, reply exactly: "I don't have this information yet."
-- Keep the answer concise, clear, and relevant.
+- Keep the answer clear, and relevant.
 - Do not make assumptions beyond the CONTEXT.
 
 Answer:
