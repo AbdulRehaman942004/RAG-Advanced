@@ -13,6 +13,7 @@ client_groq = OpenAI(
         base_url="https://api.groq.com/openai/v1",
 )
 
+
 client = chromadb.PersistentClient(path="chromadb_data")
 
 
@@ -98,7 +99,7 @@ Answer:
 if __name__ == "__main__":
     # Preserve original behaviour when run directly
 
-    if(confidence_score()>=0.8):
+    if(confidence_score(user_query)>=0.8):
         answer, _ = run_rag_query(user_query)
         print(f"\nResponse: {answer}")
 
